@@ -1,0 +1,42 @@
+[
+    {
+        "title": "Top AI Productivity Tools for Developers and Professionals",
+        "link": "https://www.freecodecamp.org/news/top-ai-productivity-tools-for-developers-and-professionals/"
+    },
+    {
+        "title": "How to Build a Browser-Based PDF Analyzer Using JavaScript",
+        "link": "https://www.freecodecamp.org/news/build-pdf-analyzer-javascript/"
+    },
+    {
+        "title": "How to Build an AJAX Cart Drawer in Shopify (the 2026 Way)",
+        "link": "https://www.freecodecamp.org/news/shopify-ajax-cart-drawer/"
+    },
+    {
+        "title": "How to Build a RAG Q&A AI Agent for Your Documents Using LangChain v1",
+        "link": "https://www.freecodecamp.org/news/build-a-private-rag-qa-ai-agent-for-your-documents-using-langchain/"
+    },
+    {
+        "title": "Codex vs Claude Code: Which AI Coding Assistant to Choose",
+        "link": "https://www.freecodecamp.org/news/codex-vs-claude-code-which-ai-coding-assistant-to-choose/"
+    },
+    {
+        "title": "Product Experimentation: Stop Early Without P-Hacking Using mSPRT and Sequential Testing in Python",
+        "link": "https://www.freecodecamp.org/news/stop-early-without-p-hacking-using-msprt-and-sequential-testing-in-python/"
+    },
+    {
+        "title": "Mastering JavaScript Dates and Times",
+        "link": "https://www.freecodecamp.org/news/mastering-javascript-dates-and-times/"
+    },
+    {
+        "title": "How to Defend Your JavaScript App Against Unsafe Data with TypeScript Guard Utilities",
+        "link": "https://www.freecodecamp.org/news/defend-your-js-app-against-unsafe-data-with-typescript-guard-utilities/"
+    },
+    {
+        "title": "The Cloud Pentesting Problem: Why Traditional Security Models Stop Working at Scale",
+        "link": "https://www.freecodecamp.org/news/the-cloud-pentesting-problem-why-traditional-security-models-stop-working-at-scale/"
+    },
+    {
+        "title": "How to Build a Browser-Based PDF Margin Tool Using JavaScript",
+        "link": "https://www.freecodecamp.org/news/build-pdf-margin-tool-javascript/"
+    }
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "name": "ChatGPT",
+    "company": "OpenAI",
+    "category": "Student",
+    "price": "Free + Paid",
+    "best_for": [
+      "Coding",
+      "Writing",
+      "Research",
+      "Study"
+    ],
+    "website": "https://chatgpt.com"
+  },
+  {
+    "name": "Gemini",
+    "company": "Google",
+    "category": "Student",
+    "price": "Free + Paid",
+    "best_for": [
+      "Research",
+      "Homework",
+      "Presentation"
+    ],
+    "website": "https://gemini.google.com"
+  },
+  {
+    "name": "Claude",
+    "company": "Anthropic",
+    "category": "Professional",
+    "price": "Free + Paid",
+    "best_for": [
+      "Writing",
+      "Programming",
+      "Long Documents"
+    ],
+    "website": "https://claude.ai"
+  },
+  {
+    "name": "Cursor",
+    "company": "Cursor",
+    "category": "Developer",
+    "price": "Free + Paid",
+    "best_for": [
+      "Python",
+      "React",
+      "Debugging"
+    ],
+    "website": "https://cursor.com"
+  },
+  {
+    "name": "GitHub Copilot",
+    "company": "GitHub",
+    "category": "Developer",
+    "price": "Paid",
+    "best_for": [
+      "Coding",
+      "Code Completion"
+    ],
+    "website": "https://github.com/features/copilot"
+  },
+  {
+    "name": "Perplexity",
+    "company": "Perplexity",
+    "category": "Research",
+    "price": "Free + Paid",
+    "best_for": [
+      "Research",
+      "Search",
+      "Learning"
+    ],
+    "website": "https://perplexity.ai"
+  },
+  {
+    "name": "NotebookLM",
+    "company": "Google",
+    "category": "Student",
+    "price": "Free",
+    "best_for": [
+      "Notes",
+      "PDF",
+      "Study"
+    ],
+    "website": "https://notebooklm.google.com"
+  }
+]

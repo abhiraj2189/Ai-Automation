@@ -1,0 +1,34 @@
+[
+  {
+    "name": "ChatGPT",
+    "company": "OpenAI",
+    "category": "Student",
+    "price": "Free + Paid",
+    "best_for": ["Coding", "Writing", "Research", "Study"],
+    "website": "https://chatgpt.com"
+  },
+  {
+    "name": "Gemini",
+    "company": "Google",
+    "category": "Student",
+    "price": "Free + Paid",
+    "best_for": ["Research", "Homework", "Presentation"],
+    "website": "https://gemini.google.com"
+  },
+  {
+    "name": "Claude",
+    "company": "Anthropic",
+    "category": "Developer",
+    "price": "Free + Paid",
+    "best_for": ["Programming", "Writing"],
+    "website": "https://claude.ai"
+  },
+  {
+    "name": "Cursor",
+    "company": "Cursor",
+    "category": "Developer",
+    "price": "Free + Paid",
+    "best_for": ["Python", "React", "Debugging"],
+    "website": "https://cursor.com"
+  }
+]
