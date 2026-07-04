@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 from fastapi import APIRouter, HTTPException
 from fastapi import APIRouter, HTTPException, Query
+from python.services.ai_tools_service import AIToolsService
 
 router = APIRouter()
 
@@ -23,7 +24,10 @@ def load_json(folder, filename):
 
 @router.get("/ai-tools")
 def get_ai_tools():
-    return load_json("ai_tools", "ai_tools.json")
+
+    service = AIToolsService()
+
+    return service.get_tools()
 
 
 @router.get("/coding")
@@ -58,4 +62,38 @@ def search_ai_tools(keyword: str = Query(...)):
     return {
         "total": len(result),
         "results": result
+    }
+def search_data(data, keyword):
+    keyword = keyword.lower()
+    result = []
+
+    for item in data:
+        if keyword in str(item).lower():
+            result.append(item)
+
+    return result
+@router.get("/analytics")
+def get_analytics():
+    return load_json("analytics", "analytics.json")
+@router.get("/search")
+def global_search(keyword: str):
+
+    ai_tools = load_json("ai_tools", "ai_tools.json")
+    coding = load_json("coding", "coding_news.json")
+
+    try:
+        github = load_json("github", "repositories.json")
+    except:
+        github = []
+
+    try:
+        news = load_json("news", "ai_news.json")
+    except:
+        news = []
+
+    return {
+        "ai_tools": search_data(ai_tools, keyword),
+        "coding_news": search_data(coding, keyword),
+        "github": search_data(github, keyword),
+        "ai_news": search_data(news, keyword)
     }
