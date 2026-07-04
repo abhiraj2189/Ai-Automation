@@ -1,0 +1,34 @@
+[
+    {
+        "name": "The Octocat",
+        "username": "octocat",
+        "followers": 23160,
+        "following": 9,
+        "public_repos": 8,
+        "profile": "https://github.com/octocat"
+    },
+    {
+        "name": null,
+        "username": "abhiraj2189",
+        "followers": 0,
+        "following": 0,
+        "public_repos": 1,
+        "profile": "https://github.com/abhiraj2189"
+    },
+    {
+        "name": "Linus Torvalds",
+        "username": "torvalds",
+        "followers": 310044,
+        "following": 0,
+        "public_repos": 12,
+        "profile": "https://github.com/torvalds"
+    },
+    {
+        "name": "Microsoft",
+        "username": "microsoft",
+        "followers": 124282,
+        "following": 0,
+        "public_repos": 8163,
+        "profile": "https://github.com/microsoft"
+    }
+]
