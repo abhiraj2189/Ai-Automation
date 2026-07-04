@@ -5,23 +5,19 @@ class AIToolsRepository:
 
     def get_all(self):
 
-        db = Database()
-
-        rows = db.cursor.execute("""
-        SELECT
-            id,
-            name,
-            category,
-            website
-        FROM ai_tools
-        """).fetchall()
-
-        db.close()
+        with Database() as db:
+            rows = db.cursor.execute("""
+            SELECT
+                id,
+                name,
+                category,
+                website
+            FROM ai_tools
+            """).fetchall()
 
         result = []
 
         for row in rows:
-
             result.append({
                 "id": row[0],
                 "name": row[1],

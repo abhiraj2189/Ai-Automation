@@ -97,3 +97,14 @@ def global_search(keyword: str):
         "github": search_data(github, keyword),
         "ai_news": search_data(news, keyword)
     }
+from fastapi import Depends
+from python.auth.auth_dependency import get_current_user
+
+
+@router.get("/profile")
+def profile(user=Depends(get_current_user)):
+
+    return {
+        "message": "Welcome",
+        "user": user
+    }
