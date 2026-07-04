@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from python.api.routes import router
+from python.auth.auth_router import router as auth_router
 
 app = FastAPI(
     title="AI Automation API",
@@ -7,18 +8,8 @@ app = FastAPI(
 )
 
 app.include_router(router)
-
+app.include_router(auth_router)
 
 @app.get("/")
 def home():
-    return {
-        "project": "AI Automation",
-        "status": "Running"
-    }
-
-
-@app.get("/health")
-def health():
-    return {
-        "success": True
-    }
+    return {"status": "Running"}

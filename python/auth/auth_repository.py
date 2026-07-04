@@ -3,7 +3,6 @@ from python.database.database import Database
 
 class AuthRepository:
 
-    # Register User
     def create_user(self, username, email, password):
 
         db = Database()
@@ -15,14 +14,3 @@ class AuthRepository:
 
         db.connection.commit()
         db.close()
-
-    # Login User
-    def get_user(self, email):
-
-        db = Database()
-
-        user = db.get_user_by_email(email)
-
-        db.close()
-
-        return user
