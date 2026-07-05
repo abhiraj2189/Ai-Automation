@@ -11,17 +11,17 @@ DB_PATH = ROOT / "database" / "ai_automation.db"
 class Database:
 
     def __init__(self):
-        # timeout: agar DB kisi aur connection se locked hai, 5 sec tak wait karega
-        # bajaye turant "database is locked" error dene ke
         self.connection = sqlite3.connect(DB_PATH, timeout=5)
         self.cursor = self.connection.cursor()
 
-        # WAL mode: reads aur writes ko ek doosre ko block karne se rokta hai,
-        # locking errors kaafi kam ho jaate hain
+        # Enable WAL Mode
         self.cursor.execute("PRAGMA journal_mode=WAL;")
 
     def create_tables(self):
 
+        # ==========================
+        # Users Table
+        # ==========================
         self.cursor.execute("""
         CREATE TABLE IF NOT EXISTS users(
 
@@ -35,6 +35,9 @@ class Database:
         )
         """)
 
+        # ==========================
+        # AI Tools Table
+        # ==========================
         self.cursor.execute("""
         CREATE TABLE IF NOT EXISTS ai_tools(
 
@@ -46,31 +49,64 @@ class Database:
         )
         """)
 
+        # ==========================
+        # Notes Table
+        # ==========================
+        self.cursor.execute("""
+        CREATE TABLE IF NOT EXISTS notes(
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            title TEXT NOT NULL,
+            content TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+            FOREIGN KEY(user_id) REFERENCES users(id)
+
+        )
+        """)
+
+        # ==========================
+        # Favorites Table
+        # ==========================
+        self.cursor.execute("""
+        CREATE TABLE IF NOT EXISTS favorites(
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            tool_name TEXT NOT NULL,
+            website TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+            FOREIGN KEY(user_id) REFERENCES users(id)
+
+        )
+        """)
+
         self.connection.commit()
 
     def get_user_by_email(self, email):
 
-        self.cursor.execute(
-            """
-            SELECT * FROM users
-            WHERE email = ?
-            """,
-            (email,)
-        )
+        self.cursor.execute("""
+        SELECT *
+        FROM users
+        WHERE email = ?
+        """, (email,))
 
         return self.cursor.fetchone()
 
     def close(self):
         self.connection.close()
 
-    # --- Context manager support: "with Database() as db:" ---
+    # Context Manager
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        # Agar block ke andar error aaya to rollback, warna already commit ho chuka hoga
+
         if exc_type is not None:
             self.connection.rollback()
+
         self.close()
-        # False return karne se original error upar propagate hoga (suppress nahi hoga)
+
         return False
