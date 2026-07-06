@@ -83,6 +83,24 @@ class Database:
         )
         """)
 
+        # ==========================
+        # Chat History Table
+        # ==========================
+        self.cursor.execute("""
+        CREATE TABLE IF NOT EXISTS chat_history(
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            conversation_id TEXT NOT NULL,
+            question TEXT NOT NULL,
+            answer TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+            FOREIGN KEY(user_id) REFERENCES users(id)
+
+        )
+        """)
+
         self.connection.commit()
 
     def get_user_by_email(self, email):

@@ -5,6 +5,8 @@ from python.database.database import Database
 from python.favorites.favorites_router import router as favorites_router
 from python.notes.notes_router import router as notes_router
 from python.dashboard.dashboard_router import router as dashboard_router
+from python.ai_chat.ai_chat_router import router as ai_chat_router
+from python.ai_chat.ai_chat_router import router as ai_chat_router
 
 app = FastAPI(
     title="AI Automation API",
@@ -22,6 +24,8 @@ app.include_router(favorites_router)
 app.include_router(auth_router)
 app.include_router(notes_router)
 app.include_router(dashboard_router)
+app.include_router(ai_chat_router)
+app.include_router(ai_chat_router)
 
 @app.get("/")
 def home():
