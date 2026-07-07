@@ -1,39 +1,71 @@
 import { useState } from "react";
 import MainLayout from "../layouts/MainLayout";
+import { sendMessage } from "../api/chatApi";
 
 export default function AIChat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const sendMessage = async () => {
-    if (!input) return;
+  const handleSend = async () => {
+    if (!input.trim() || loading) return;
 
-    const userMessage = { role: "user", text: input };
-    setMessages([...messages, userMessage]);
+    const userInput = input;
+
+    // User message
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: "user",
+        text: userInput,
+      },
+    ]);
 
     setInput("");
+    setLoading(true);
 
-    // dummy AI response (backend connect later)
-    setTimeout(() => {
-      const botMessage = {
-        role: "ai",
-        text: "🤖 AI response coming soon...",
-      };
-      setMessages((prev) => [...prev, botMessage]);
-    }, 500);
+    try {
+      const aiReply = await sendMessage(userInput);
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "ai",
+          text: aiReply,
+        },
+      ]);
+    } catch (error) {
+      console.error(error);
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "ai",
+          text: "❌ Unable to connect to AI backend.",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <MainLayout>
       <div className="h-[80vh] flex flex-col">
 
-        {/* Messages */}
-        <div className="flex-1 overflow-auto space-y-3 p-4 bg-zinc-900 rounded-xl">
+        {/* Chat Messages */}
+        <div className="flex-1 overflow-y-auto bg-zinc-900 rounded-xl p-5 space-y-4">
 
-          {messages.map((msg, i) => (
+          {messages.length === 0 && (
+            <div className="text-center text-zinc-400 mt-10">
+              🤖 Ask me anything...
+            </div>
+          )}
+
+          {messages.map((msg, index) => (
             <div
-              key={i}
-              className={`p-3 rounded-lg w-fit max-w-[70%] ${
+              key={index}
+              className={`max-w-[75%] p-4 rounded-xl ${
                 msg.role === "user"
                   ? "bg-cyan-600 ml-auto"
                   : "bg-zinc-700"
@@ -43,23 +75,36 @@ export default function AIChat() {
             </div>
           ))}
 
+          {loading && (
+            <div className="bg-zinc-700 rounded-xl p-4 w-fit">
+              🤖 Thinking...
+            </div>
+          )}
+
         </div>
 
-        {/* Input */}
+        {/* Input Area */}
         <div className="flex gap-3 mt-4">
 
           <input
+            type="text"
+            placeholder="Ask anything..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask AI..."
-            className="flex-1 p-3 rounded-lg bg-zinc-800 outline-none"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSend();
+              }
+            }}
+            className="flex-1 bg-zinc-800 rounded-xl p-4 outline-none"
           />
 
           <button
-            onClick={sendMessage}
-            className="bg-cyan-500 px-6 py-2 rounded-lg"
+            onClick={handleSend}
+            disabled={loading}
+            className="bg-cyan-500 hover:bg-cyan-600 px-8 rounded-xl transition"
           >
-            Send
+            {loading ? "..." : "Send"}
           </button>
 
         </div>

@@ -9,6 +9,10 @@ from python.notes.notes_router import router as notes_router
 from python.dashboard.dashboard_router import router as dashboard_router
 from python.ai_chat.ai_chat_router import router as ai_chat_router
 from python.chat.chat_router import router as chat_router
+from python.research.research_router import router as research_router
+from python.script.script_router import router as script_router
+from python.scene.scene_router import router as scene_router
+from python.studio.studio_router import router as studio_router
 
 app = FastAPI(
     title="AI Automation API",
@@ -58,3 +62,7 @@ app.include_router(notes_router)
 app.include_router(dashboard_router)
 app.include_router(ai_chat_router)
 app.include_router(chat_router)
+app.include_router(research_router)
+app.include_router(script_router)
+app.include_router(scene_router)
+app.include_router(studio_router)
