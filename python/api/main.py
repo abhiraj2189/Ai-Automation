@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 from python.api.routes import router
 from python.auth.auth_router import router as auth_router
 from python.database.database import Database
@@ -6,27 +8,53 @@ from python.favorites.favorites_router import router as favorites_router
 from python.notes.notes_router import router as notes_router
 from python.dashboard.dashboard_router import router as dashboard_router
 from python.ai_chat.ai_chat_router import router as ai_chat_router
-from python.ai_chat.ai_chat_router import router as ai_chat_router
+from python.chat.chat_router import router as chat_router
 
 app = FastAPI(
     title="AI Automation API",
-    version="1.0.0"
+    version="1.0.0",
+    description="AI Automation Backend"
 )
 
+# ==========================
+# CORS
+# ==========================
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ==========================
+# Startup
+# ==========================
 @app.on_event("startup")
 def startup_event():
     db = Database()
     db.create_tables()
     db.close()
 
+# ==========================
+# Home
+# ==========================
+@app.get("/")
+def home():
+    return {
+        "status": "Running 🚀",
+        "message": "AI Automation Backend"
+    }
+
+# ==========================
+# Routers
+# ==========================
 app.include_router(router)
-app.include_router(favorites_router)
 app.include_router(auth_router)
+app.include_router(favorites_router)
 app.include_router(notes_router)
 app.include_router(dashboard_router)
 app.include_router(ai_chat_router)
-app.include_router(ai_chat_router)
-
-@app.get("/")
-def home():
-    return {"status": "Running"}
+app.include_router(chat_router)
