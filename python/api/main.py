@@ -16,6 +16,7 @@ from python.studio.studio_router import router as studio_router
 from python.projects.project_router import router as project_router
 from python.assets.asset_router import router as asset_router
 from python.voice.voice_router import router as voice_router
+from python.voice.voice_router import router as voice_router
 
 app = FastAPI(
     title="AI Automation API",
@@ -71,4 +72,5 @@ app.include_router(scene_router)
 app.include_router(studio_router)
 app.include_router(project_router)
 app.include_router(asset_router)
+app.include_router(voice_router)
 app.include_router(voice_router)

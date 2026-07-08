@@ -10,6 +10,7 @@ import {
 import { FaSearch } from "react-icons/fa";
 import { FaPenNib } from "react-icons/fa";
 import { FaVideo } from "react-icons/fa";
+import { FaVideo } from "react-icons/fa";
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -89,6 +90,13 @@ export default function Sidebar() {
 >
   <FaVideo />
   Scene Generator
+</Link>
+<Link
+    to="/studio"
+    className="flex items-center gap-3 hover:text-cyan-400"
+>
+    <FaVideo />
+    AI Studio
 </Link>
 
         </nav>

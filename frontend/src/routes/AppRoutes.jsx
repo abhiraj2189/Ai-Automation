@@ -10,6 +10,7 @@ import Settings from "../pages/Settings";
 import Research from "../pages/Research";
 import Script from "../pages/Script";
 import Scene from "../pages/Scene";
+import Studio from "../pages/Studio";
 
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -91,6 +92,14 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+    path="/studio"
+    element={
+        <ProtectedRoute>
+            <Studio />
+        </ProtectedRoute>
+    }
+/>
     </Routes>
   );
 }

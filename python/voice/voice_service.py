@@ -1,26 +1,17 @@
-from pathlib import Path
+from fastapi import APIRouter
 
-from python.voice.providers.kokoro_provider import KokoroProvider
+from python.voice.voice_schema import VoiceRequest
+from python.voice.voice_service import VoiceService
+
+router = APIRouter(
+    prefix="/voice",
+    tags=["Voice"]
+)
 
 
-class VoiceService:
+@router.post("/")
+def generate_voice(data: VoiceRequest):
 
-    def __init__(self):
+    service = VoiceService()
 
-        self.provider = KokoroProvider()
-
-    def generate(self, text: str):
-
-        output_dir = Path("python/voice/outputs")
-        output_dir.mkdir(parents=True, exist_ok=True)
-
-        output_path = output_dir / "voice.wav"
-
-        self.provider.generate(
-            text=text,
-            output_path=str(output_path)
-        )
-
-        return {
-            "audio_path": str(output_path)
-        }
+    return service.generate(data.text)
