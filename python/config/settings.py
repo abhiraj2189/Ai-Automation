@@ -3,15 +3,60 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-PROJECT_ROOT = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "../../")
-)
 
-DATA_DIR = os.path.join(PROJECT_ROOT, "data")
-OUTPUT_DIR = os.path.join(PROJECT_ROOT, "output")
+class Settings:
 
-os.makedirs(DATA_DIR, exist_ok=True)
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+    # ============================
+    # AI MODEL
+    # ============================
 
-# OpenAI API Key
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    OLLAMA_MODEL = os.getenv(
+        "OLLAMA_MODEL",
+        "qwen2.5:7b-instruct"
+    )
+
+    # ============================
+    # TELEGRAM
+    # ============================
+
+    TELEGRAM_LINK = os.getenv(
+        "TELEGRAM_LINK",
+        "https://t.me/your_channel"
+    )
+
+    # ============================
+    # OUTPUT
+    # ============================
+
+    OUTPUT_FOLDER = os.getenv(
+        "OUTPUT_FOLDER",
+        "outputs"
+    )
+
+    # ============================
+    # VIDEO
+    # ============================
+
+    VIDEO_WIDTH = int(
+        os.getenv("VIDEO_WIDTH", "1080")
+    )
+
+    VIDEO_HEIGHT = int(
+        os.getenv("VIDEO_HEIGHT", "1920")
+    )
+
+    FPS = int(
+        os.getenv("FPS", "30")
+    )
+
+    # ============================
+    # LOGGING
+    # ============================
+
+    LOG_LEVEL = os.getenv(
+        "LOG_LEVEL",
+        "INFO"
+    )
+
+
+settings = Settings()

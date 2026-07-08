@@ -1,7 +1,8 @@
-from datetime import datetime
+import logging
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s"
+)
 
-def log(message):
-    print(
-        f"[{datetime.now().strftime('%H:%M:%S')}] {message}"
-    )
+logger = logging.getLogger("AIAutomation")

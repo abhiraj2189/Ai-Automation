@@ -1,7 +1,18 @@
-import json
-import ollama
-
 from python.scene.prompt_builder import PromptBuilder
+from python.utils.ollama_client import generate_json
+
+
+SYSTEM_PROMPT = """
+You are an AI Storyboard Director.
+
+Return ONLY valid JSON.
+
+Every field must be filled.
+
+No markdown.
+
+No explanation.
+"""
 
 
 class SceneService:
@@ -10,29 +21,23 @@ class SceneService:
 
         prompt = PromptBuilder.build(script)
 
-        response = ollama.chat(
-            model="llama3.2:3b",
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
-        )
-
-        content = response["message"]["content"]
-
         try:
-            return json.loads(content)
-        except Exception:
+
+            return generate_json(
+                prompt=prompt,
+                system=SYSTEM_PROMPT
+            )
+
+        except ValueError:
+
             return [
                 {
                     "scene": 1,
-                    "duration": "Unknown",
-                    "voice": content,
-                    "visual": "",
-                    "caption": "",
-                    "animation": "",
-                    "transition": ""
+                    "duration": "0-10 sec",
+                    "voice": script[:200],
+                    "visual": "Technology",
+                    "caption": "AI Automation",
+                    "animation": "Zoom In",
+                    "transition": "Fade"
                 }
             ]

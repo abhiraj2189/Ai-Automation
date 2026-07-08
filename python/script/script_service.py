@@ -1,6 +1,22 @@
-import ollama
-
 from python.script.prompt_builder import PromptBuilder
+from python.utils.ollama_client import generate_text
+
+
+SYSTEM_PROMPT = """
+You are an expert YouTube Shorts script writer.
+
+No greetings.
+
+Never start with:
+
+Hi everyone
+Hello everyone
+Welcome back
+
+Always start with a curiosity hook or shocking fact.
+
+Return only the script.
+"""
 
 
 class ScriptService:
@@ -9,14 +25,7 @@ class ScriptService:
 
         prompt = PromptBuilder.build(research)
 
-        response = ollama.chat(
-            model="llama3.2:3b",
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
+        return generate_text(
+            prompt=prompt,
+            system=SYSTEM_PROMPT
         )
-
-        return response["message"]["content"]
