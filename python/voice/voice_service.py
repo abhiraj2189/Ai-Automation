@@ -1,17 +1,36 @@
-from fastapi import APIRouter
+import asyncio
 
-from python.voice.voice_schema import VoiceRequest
-from python.voice.voice_service import VoiceService
-
-router = APIRouter(
-    prefix="/voice",
-    tags=["Voice"]
-)
+from python.voice.edge_tts_service import EdgeTTSService
 
 
-@router.post("/")
-def generate_voice(data: VoiceRequest):
+class VoiceService:
 
-    service = VoiceService()
+    def generate(
 
-    return service.generate(data.text)
+        self,
+
+        text,
+
+        output,
+
+        language="hindi_male"
+
+    ):
+
+        service = EdgeTTSService()
+
+        asyncio.run(
+
+            service.generate(
+
+                text,
+
+                output,
+
+                language
+
+            )
+
+        )
+
+        return output

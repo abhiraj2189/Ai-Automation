@@ -12,7 +12,7 @@ class Settings:
 
     OLLAMA_MODEL = os.getenv(
         "OLLAMA_MODEL",
-        "qwen2.5:7b-instruct"
+        "llama3.2:3b"
     )
 
     # ============================
@@ -22,6 +22,15 @@ class Settings:
     TELEGRAM_LINK = os.getenv(
         "TELEGRAM_LINK",
         "https://t.me/your_channel"
+    )
+
+    # ============================
+    # PEXELS API
+    # ============================
+
+    PEXELS_API_KEY = os.getenv(
+        "PEXELS_API_KEY",
+        ""
     )
 
     # ============================
@@ -56,6 +65,30 @@ class Settings:
     LOG_LEVEL = os.getenv(
         "LOG_LEVEL",
         "INFO"
+    )
+
+    # ============================
+    # PIPER TTS
+    # ============================
+
+    PIPER_PATH = os.getenv(
+        "PIPER_PATH",
+        "tools/piper/piper.exe"
+    )
+
+    ENGLISH_MODEL = os.getenv(
+        "ENGLISH_MODEL",
+        "voices/english/en_US-medium.onnx"
+    )
+
+    HINDI_MODEL = os.getenv(
+        "HINDI_MODEL",
+        "voices/hindi/hi_IN-medium.onnx"
+    )
+
+    HINGLISH_MODEL = os.getenv(
+        "HINGLISH_MODEL",
+        "voices/hinglish/hinglish.onnx"
     )
 
 

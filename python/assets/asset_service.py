@@ -1,23 +1,52 @@
-from python.assets.prompt_builder import PromptBuilder
-from python.utils.ollama_client import generate_json
+import os
 
-
-SYSTEM = """
-Return only valid JSON.
-
-Never use markdown.
-
-Every field must be filled.
-"""
+from python.assets.pexels_service import PexelsService
+from python.assets.downloader import Downloader
 
 
 class AssetService:
 
-    def generate_assets(self, scenes):
+    def generate(
+        self,
+        keyword,
+        count
+    ):
 
-        prompt = PromptBuilder.build(scenes)
+        service = PexelsService()
 
-        return generate_json(
-            prompt=prompt,
-            system=SYSTEM
+        videos = service.search(
+            keyword,
+            count
         )
+
+        downloaded = []
+
+        for index, video in enumerate(videos):
+
+            filename = f"{keyword}_{index}.mp4"
+
+            filename = filename.replace(" ", "_")
+
+            output = os.path.join(
+                "outputs",
+                "assets",
+                "videos",
+                filename
+            )
+
+            Downloader.download(
+                video["url"],
+                output
+            )
+
+            downloaded.append({
+
+                "keyword": keyword,
+
+                "path": output,
+
+                "duration": video["duration"]
+
+            })
+
+        return downloaded
