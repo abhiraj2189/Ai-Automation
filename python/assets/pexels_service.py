@@ -13,13 +13,15 @@ class PexelsService:
         count: int = 5
     ):
 
+        print(f"Searching Pexels for: {keyword}")
+
         headers = {
             "Authorization": settings.PEXELS_API_KEY
         }
 
         params = {
             "query": keyword,
-            "per_page": count
+            "per_page": min(count * 3, 30)
         }
 
         response = requests.get(
@@ -35,22 +37,75 @@ class PexelsService:
 
         videos = []
 
+        used = set()
+
         for video in data.get("videos", []):
 
-            if not video.get("video_files"):
+            files = video.get("video_files", [])
+
+            if not files:
                 continue
 
-            best = max(
-                video["video_files"],
-                key=lambda x: x.get("width", 0)
+            # Highest Resolution
+            files = sorted(
+                files,
+                key=lambda x: (
+                    x.get("width", 0),
+                    x.get("height", 0)
+                ),
+                reverse=True
             )
 
+            best = None
+
+            for f in files:
+
+                width = f.get("width", 0)
+                height = f.get("height", 0)
+
+                if width >= 720:
+
+                    best = f
+                    break
+
+            if best is None:
+                best = files[0]
+
+            url = best["link"]
+
+            if url in used:
+                continue
+
+            used.add(url)
+
             videos.append({
+
                 "id": video["id"],
-                "duration": video["duration"],
-                "url": best["link"],
-                "width": best["width"],
-                "height": best["height"]
+
+                "duration": video.get(
+                    "duration",
+                    0
+                ),
+
+                "url": url,
+
+                "width": best.get(
+                    "width",
+                    0
+                ),
+
+                "height": best.get(
+                    "height",
+                    0
+                ),
+
+                "quality": "HD"
+
             })
+
+            if len(videos) >= count:
+                break
+
+        print(f"Found {len(videos)} HD videos.")
 
         return videos

@@ -1,5 +1,4 @@
 import os
-
 from moviepy import AudioFileClip
 
 
@@ -17,38 +16,77 @@ class TimelineEngine:
 
     ):
 
+        if not scenes:
+            raise Exception("No scenes found.")
+
+        if not videos:
+            raise Exception("No videos found.")
+
+        if not os.path.exists(audio):
+            raise Exception("Audio file not found.")
+
         audio_clip = AudioFileClip(audio)
 
-        duration = audio_clip.duration
-
-        per_scene = duration / len(scenes)
+        total_duration = audio_clip.duration
 
         timeline = []
 
-        index = 0
+        current = 0
 
-        for scene in scenes:
+        per_scene = total_duration / len(scenes)
+
+        for index, scene in enumerate(scenes):
 
             video = videos[index % len(videos)]
 
+            start = round(current, 2)
+
+            end = round(current + per_scene, 2)
+
             timeline.append({
 
-                "scene": scene,
+                "scene": index + 1,
 
                 "video": video,
 
-                "start": round(index * per_scene, 2),
+                "start": start,
 
-                "end": round((index + 1) * per_scene, 2)
+                "end": end,
+
+                "duration": round(per_scene, 2),
+
+                "voice": scene.get("voice", ""),
+
+                "caption": scene.get("caption", ""),
+
+                "visual": scene.get("visual", ""),
+
+                "animation": scene.get(
+
+                    "animation",
+
+                    "zoom"
+
+                ),
+
+                "transition": scene.get(
+
+                    "transition",
+
+                    "fade"
+
+                )
 
             })
 
-            index += 1
+            current += per_scene
 
         return {
 
-            "timeline": timeline,
+            "duration": round(total_duration, 2),
 
-            "duration": duration
+            "total_scenes": len(timeline),
+
+            "timeline": timeline
 
         }

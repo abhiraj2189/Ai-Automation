@@ -7,9 +7,9 @@ from python.timeline_v2.timeline_service import TimelineService
 
 router = APIRouter(
 
-    prefix="/timeline-v2",
+    prefix="/timeline",
 
-    tags=["Timeline V2"]
+    tags=["Timeline"]
 
 )
 
@@ -26,10 +26,10 @@ def generate(
 
     return service.generate(
 
-        data.scenes,
+        scenes=data.scenes,
 
-        data.videos,
+        videos=data.videos,
 
-        data.audio
+        audio=data.audio
 
     )

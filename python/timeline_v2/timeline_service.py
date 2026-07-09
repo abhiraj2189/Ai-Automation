@@ -19,10 +19,10 @@ class TimelineService:
 
         return engine.generate(
 
-            scenes,
+            scenes=scenes,
 
-            videos,
+            videos=videos,
 
-            audio
+            audio=audio
 
         )

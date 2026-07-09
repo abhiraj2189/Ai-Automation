@@ -1,6 +1,8 @@
+import os
 import time
 
 from python.renderer.ffmpeg_engine import FFmpegEngine
+from python.renderer.subtitle_renderer import SubtitleRenderer
 
 
 class RendererService:
@@ -23,17 +25,41 @@ class RendererService:
 
         engine = FFmpegEngine()
 
-        result = engine.render(
+        temp_video = output.replace(
+
+            ".mp4",
+
+            "_temp.mp4"
+
+        )
+
+        engine.render(
 
             audio=audio,
 
-            subtitle=subtitle,
+            subtitle=None,
 
             videos=videos,
 
-            output=output
+            output=temp_video
 
         )
+
+        renderer = SubtitleRenderer()
+
+        renderer.burn(
+
+            temp_video,
+
+            subtitle,
+
+            output
+
+        )
+
+        if os.path.exists(temp_video):
+
+            os.remove(temp_video)
 
         end = time.time()
 
@@ -41,8 +67,14 @@ class RendererService:
 
             "status": "completed",
 
-            "output": result,
+            "video": output,
 
-            "render_time": round(end - start, 2)
+            "render_time": round(
+
+                end - start,
+
+                2
+
+            )
 
         }

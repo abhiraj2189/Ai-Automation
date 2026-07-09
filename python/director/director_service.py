@@ -1,35 +1,24 @@
-import re
+from python.director.director_engine import DirectorEngine
 
 
 class DirectorService:
 
-    def generate(self, script):
+    def generate(
 
-        sentences = re.split(r"[.!?]", script)
+        self,
 
-        scenes = []
+        script,
 
-        for i, text in enumerate(sentences):
+        scenes
 
-            text = text.strip()
+    ):
 
-            if not text:
-                continue
+        engine = DirectorEngine()
 
-            scenes.append({
+        return engine.generate(
 
-                "scene": i + 1,
+            script,
 
-                "text": text,
+            scenes
 
-                "asset": text[:40],
-
-                "duration": 5
-
-            })
-
-        return {
-
-            "scenes": scenes
-
-        }
+        )

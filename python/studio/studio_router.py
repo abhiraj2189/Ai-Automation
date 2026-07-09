@@ -1,22 +1,35 @@
 from fastapi import APIRouter
+from pydantic import BaseModel
 
 from python.studio.studio_service import StudioService
-from python.studio.studio_schema import TopicRequest
+
 
 router = APIRouter(
+
     prefix="/studio",
+
     tags=["AI Studio"]
+
 )
 
 
+class StudioRequest(BaseModel):
+
+    topic: str
+
+
 @router.post("/")
-def generate(data: TopicRequest):
+
+def generate(
+
+    data: StudioRequest
+
+):
 
     service = StudioService()
 
-    result = service.generate(data.topic)
+    return service.generate(
 
-    return {
-        "success": True,
-        "data": result
-    }
+        topic=data.topic
+
+    )

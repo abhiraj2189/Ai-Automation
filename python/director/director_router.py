@@ -4,23 +4,28 @@ from python.director.models import DirectorRequest
 
 from python.director.director_service import DirectorService
 
+
 router = APIRouter(
 
     prefix="/director",
 
-    tags=["Director"]
+    tags=["AI Director"]
 
 )
 
 
 @router.post("/")
 
-def generate(data: DirectorRequest):
+def generate(
 
-    service = DirectorService()
+    data: DirectorRequest
 
-    return service.generate(
+):
 
-        data.script
+    return DirectorService().generate(
+
+        data.script,
+
+        data.scenes
 
     )

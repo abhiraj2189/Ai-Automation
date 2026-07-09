@@ -1,103 +1,105 @@
 import os
 import subprocess
-import tempfile
+
+from moviepy import AudioFileClip
+
+from python.renderer.transition_engine import TransitionEngine
 
 
 class FFmpegEngine:
 
     def render(
+
         self,
+
         audio,
+
         subtitle,
+
         videos,
+
         output
+
     ):
 
-        if not videos:
-            raise Exception("No videos found.")
+        print("=" * 60)
+        print("Renderer Started")
+        print("=" * 60)
 
-        os.makedirs(
-            os.path.dirname(output),
-            exist_ok=True
-        )
+        audio_clip = AudioFileClip(audio)
 
-        # -----------------------
-        # Create temp video list
-        # -----------------------
+        total_duration = audio_clip.duration
 
-        with tempfile.NamedTemporaryFile(
-            mode="w",
-            delete=False,
-            suffix=".txt"
-        ) as f:
+        temp_video = output.replace(
 
-            for video in videos:
-
-                if os.path.exists(video):
-                    f.write(
-                        f"file '{os.path.abspath(video)}'\n"
-                    )
-
-            list_file = f.name
-
-        merged_video = output.replace(
             ".mp4",
-            "_merged.mp4"
+
+            "_timeline.mp4"
+
         )
 
-        # -----------------------
-        # Merge Videos
-        # -----------------------
+        timeline = TransitionEngine()
+
+        timeline.build(
+
+            videos,
+
+            total_duration,
+
+            temp_video
+
+        )
+
+        cmd = [
+
+            "ffmpeg",
+
+            "-y",
+
+            "-i",
+
+            temp_video,
+
+            "-i",
+
+            audio,
+
+            "-map",
+
+            "0:v",
+
+            "-map",
+
+            "1:a",
+
+            "-c:v",
+
+            "copy",
+
+            "-c:a",
+
+            "aac",
+
+            "-shortest",
+
+            output
+
+        ]
 
         subprocess.run(
 
-            [
-                "ffmpeg",
-                "-y",
-                "-f",
-                "concat",
-                "-safe",
-                "0",
-                "-i",
-                list_file,
-                "-c",
-                "copy",
-                merged_video
-            ],
+            cmd,
 
             check=True
 
         )
 
-        # -----------------------
-        # Add Audio
-        # -----------------------
+        if os.path.exists(temp_video):
 
-        subprocess.run(
+            os.remove(temp_video)
 
-            [
-                "ffmpeg",
-                "-y",
-                "-i",
-                merged_video,
-                "-i",
-                audio,
-                "-c:v",
-                "copy",
-                "-c:a",
-                "aac",
-                "-shortest",
-                output
-            ],
-
-            check=True
-
-        )
-
-        # Cleanup
-
-        os.remove(list_file)
-
-        os.remove(merged_video)
+        print("=" * 60)
+        print("Renderer Finished")
+        print("=" * 60)
 
         return output

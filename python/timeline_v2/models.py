@@ -12,4 +12,8 @@ class TimelineRequest(BaseModel):
 
 class TimelineResponse(BaseModel):
 
+    duration: float
+
+    total_scenes: int
+
     timeline: list
