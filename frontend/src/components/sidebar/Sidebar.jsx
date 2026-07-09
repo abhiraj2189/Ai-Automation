@@ -10,7 +10,7 @@ import {
 import { FaSearch } from "react-icons/fa";
 import { FaPenNib } from "react-icons/fa";
 import { FaVideo } from "react-icons/fa";
-import { FaVideo } from "react-icons/fa";
+
 
 export default function Sidebar() {
   const navigate = useNavigate();

@@ -1,19 +1,16 @@
-const API = "http://127.0.0.1:8000";
+import axios from "axios";
 
-export async function generateProject(topic) {
-  const response = await fetch(`${API}/studio`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      topic,
-    }),
+const API = axios.create({
+  baseURL: "http://127.0.0.1:8000",
+  timeout: 300000,
+});
+
+export const generateVideo = async (topic) => {
+  const response = await API.post("/studio/", {
+    topic,
   });
 
-  if (!response.ok) {
-    throw new Error("Generation Failed");
-  }
+  return response.data;
+};
 
-  return await response.json();
-}
+export default API;
