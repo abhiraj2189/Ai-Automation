@@ -1,21 +1,35 @@
-from python.utils.ollama_client import generate_json
-from python.director.prompt_builder import PromptBuilder
-
-
-SYSTEM = """
-You are an expert YouTube Shorts Director.
-
-Return ONLY valid JSON.
-"""
+import re
 
 
 class DirectorService:
 
     def generate(self, script):
 
-        prompt = PromptBuilder.build(script)
+        sentences = re.split(r"[.!?]", script)
 
-        return generate_json(
-            prompt=prompt,
-            system=SYSTEM
-        )
+        scenes = []
+
+        for i, text in enumerate(sentences):
+
+            text = text.strip()
+
+            if not text:
+                continue
+
+            scenes.append({
+
+                "scene": i + 1,
+
+                "text": text,
+
+                "asset": text[:40],
+
+                "duration": 5
+
+            })
+
+        return {
+
+            "scenes": scenes
+
+        }

@@ -1,115 +1,96 @@
 import json
-import re
-import ollama
+import requests
 
 from python.config.settings import settings
 
-DEFAULT_MODEL = settings.OLLAMA_MODEL
+OLLAMA_URL = "http://127.0.0.1:11434/api/generate"
 
 
-def _clean_json(text: str) -> str:
-    """
-    Remove markdown code fences and extract JSON.
-    """
+def generate(prompt: str, system: str = ""):
 
-    text = text.strip()
+    payload = {
+        "model": settings.OLLAMA_MODEL,
+        "prompt": prompt,
+        "system": system,
+        "stream": False
+    }
 
-    # Remove markdown fences
-    text = re.sub(r"^```json", "", text, flags=re.IGNORECASE)
-    text = re.sub(r"^```", "", text)
-    text = re.sub(r"```$", "", text)
+    print("=" * 80)
+    print("MODEL :", settings.OLLAMA_MODEL)
+    print("Sending request to Ollama...")
 
-    text = text.strip()
+    response = requests.post(
+        OLLAMA_URL,
+        json=payload,
+        timeout=180
+    )
 
-    # JSON Array
-    start_array = text.find("[")
-    end_array = text.rfind("]")
+    print("STATUS :", response.status_code)
 
-    if start_array != -1 and end_array != -1:
-        return text[start_array:end_array + 1]
+    response.raise_for_status()
 
-    # JSON Object
-    start_obj = text.find("{")
-    end_obj = text.rfind("}")
+    data = response.json()
 
-    if start_obj != -1 and end_obj != -1:
-        return text[start_obj:end_obj + 1]
+    print("DONE :", data.get("done"))
+
+    text = data.get("response", "")
+
+    print("Response Length :", len(text))
+
+    print("=" * 80)
 
     return text
 
 
-def generate_text(
-    prompt: str,
-    system: str = "",
-    model: str = DEFAULT_MODEL
-):
+# ===================================================
+# TEXT GENERATION
+# ===================================================
 
-    response = ollama.chat(
-        model=model,
-        messages=[
-            {
-                "role": "system",
-                "content": system
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
+def generate_text(prompt: str, system: str = ""):
+    """
+    Used by ResearchService and ScriptService
+    """
+    return generate(prompt, system)
+
+
+# ===================================================
+# JSON GENERATION
+# ===================================================
+
+def generate_json(prompt: str, system: str = ""):
+
+    text = generate(prompt, system)
+
+    print("\n================ RAW RESPONSE ================\n")
+    print(text)
+    print("\n==============================================\n")
+
+    # Direct JSON
+    try:
+        return json.loads(text)
+    except Exception:
+        pass
+
+    # JSON Object
+    try:
+        start = text.find("{")
+        end = text.rfind("}")
+
+        if start != -1 and end != -1:
+            return json.loads(text[start:end + 1])
+    except Exception:
+        pass
+
+    # JSON Array
+    try:
+        start = text.find("[")
+        end = text.rfind("]")
+
+        if start != -1 and end != -1:
+            return json.loads(text[start:end + 1])
+    except Exception:
+        pass
+
+    raise ValueError(
+        "Ollama did not return valid JSON.\n\nResponse:\n" + text
     )
-
-    return response["message"]["content"]
-
-
-def generate_json(
-    prompt: str,
-    system: str = "",
-    model: str = DEFAULT_MODEL,
-    retries: int = 2
-):
-
-    system_prompt = f"""
-{system}
-
-Return ONLY VALID JSON.
-
-No markdown.
-
-No explanation.
-
-No comments.
-"""
-
-    current_prompt = prompt
-
-    for _ in range(retries + 1):
-
-        response = generate_text(
-            prompt=current_prompt,
-            system=system_prompt,
-            model=model
-        )
-
-        cleaned = _clean_json(response)
-
-        try:
-
-            return json.loads(cleaned)
-
-        except Exception as e:
-
-            current_prompt = f"""
-Your previous response was INVALID JSON.
-
-JSON Error:
-
-{e}
-
-Previous Output:
-
-{response}
-
-Return ONLY corrected VALID JSON.
-"""
-
-    raise ValueError("Unable to generate valid JSON.")

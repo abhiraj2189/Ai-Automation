@@ -10,7 +10,8 @@ router = APIRouter(
 
 
 class ScriptRequest(BaseModel):
-    topic: str
+
+    research: str
 
 
 @router.post("/")
@@ -18,10 +19,11 @@ def generate_script(data: ScriptRequest):
 
     service = ScriptService()
 
-    script = service.generate_script(data.topic)
+    script = service.generate_script(
+        data.research
+    )
 
     return {
         "success": True,
-        "topic": data.topic,
         "script": script
     }

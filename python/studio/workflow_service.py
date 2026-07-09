@@ -1,7 +1,6 @@
 from python.research.research_service import ResearchService
 from python.script.script_service import ScriptService
 from python.scene.scene_service import SceneService
-
 from python.config.settings import settings
 
 
@@ -9,32 +8,31 @@ class WorkflowService:
 
     def run(self, topic: str):
 
-        research_service = ResearchService()
-        script_service = ScriptService()
-        scene_service = SceneService()
+        try:
+            print("Generating Research...")
+            research = ResearchService().generate_research(topic)
+            print("Research Done")
 
-        print("Generating Research...")
+            print("Generating Script...")
+            script = ScriptService().generate_script(research)
+            print("Script Done")
 
-        research = research_service.generate_research(topic)
+            script = script.replace(
+                "[TELEGRAM_LINK]",
+                settings.TELEGRAM_LINK
+            )
 
-        print("Generating Script...")
+            print("Generating Scenes...")
+            scenes = SceneService().generate_scene(script)
+            print("Scenes Done")
 
-        # Script now uses research output
-        script = script_service.generate_script(research)
+            return {
+                "topic": topic,
+                "research": research,
+                "script": script,
+                "scenes": scenes
+            }
 
-        # Replace Telegram placeholder
-        script = script.replace(
-            "[TELEGRAM_LINK]",
-            settings.TELEGRAM_LINK
-        )
-
-        print("Generating Scenes...")
-
-        scenes = scene_service.generate_scene(script)
-
-        return {
-            "topic": topic,
-            "research": research,
-            "script": script,
-            "scenes": scenes
-        }
+        except Exception as e:
+            print("WORKFLOW ERROR:", e)
+            raise

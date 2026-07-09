@@ -25,6 +25,10 @@ from python.timeline.timeline_router import router as timeline_router
 from python.video.video_router import router as video_router
 from python.voice.voice_router import router as voice_router
 from python.assets.asset_router import router as asset_router
+from python.renderer.renderer_router import router as renderer_router
+from python.director.director_router import router as director_router
+from python.captions.caption_router import router as caption_router
+from python.composer.composer_router import router as composer_router
 
 app = FastAPI(
     title="AI Automation API",
@@ -90,3 +94,7 @@ app.include_router(timeline_router)
 app.include_router(video_router)
 app.include_router(voice_router)
 app.include_router(asset_router)
+app.include_router(renderer_router)
+app.include_router(director_router)
+app.include_router(caption_router)
+app.include_router(composer_router)
