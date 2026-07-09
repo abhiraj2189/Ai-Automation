@@ -1,8 +1,8 @@
-export default function Settings() {
+export default function Projects() {
   return (
     <div>
       <h1 className="text-3xl font-bold">
-        Settings
+        Projects
       </h1>
     </div>
   );
