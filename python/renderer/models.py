@@ -1,12 +1,21 @@
 from pydantic import BaseModel
 
 
-class RenderRequest(BaseModel):
+class RendererRequest(BaseModel):
 
-    video_paths: list[str]
+    audio: str
 
-    audio_path: str
+    subtitle: str
 
-    subtitle_path: str
+    videos: list[str]
 
     output: str = "outputs/final/final_video.mp4"
+
+
+class RendererResponse(BaseModel):
+
+    status: str
+
+    output: str
+
+    render_time: float

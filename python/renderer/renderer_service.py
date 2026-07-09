@@ -1,6 +1,6 @@
-from python.renderer.video_renderer import VideoRenderer
-from python.renderer.audio_mixer import AudioMixer
-from python.renderer.subtitle_renderer import SubtitleRenderer
+import time
+
+from python.renderer.ffmpeg_engine import FFmpegEngine
 
 
 class RendererService:
@@ -9,48 +9,40 @@ class RendererService:
 
         self,
 
-        videos,
-
         audio,
 
         subtitle,
+
+        videos,
 
         output
 
     ):
 
-        renderer = VideoRenderer()
+        start = time.time()
 
-        mixer = AudioMixer()
+        engine = FFmpegEngine()
 
-        sub = SubtitleRenderer()
+        result = engine.render(
 
-        clip = renderer.render(videos)
+            audio=audio,
 
-        clip = clip.with_audio(
+            subtitle=subtitle,
 
-            mixer.load(audio)
+            videos=videos,
 
-        )
-
-        clip = sub.apply(
-
-            clip,
-
-            subtitle
+            output=output
 
         )
 
-        clip.write_videofile(
+        end = time.time()
 
-            output,
+        return {
 
-            fps=30,
+            "status": "completed",
 
-            codec="libx264",
+            "output": result,
 
-            audio_codec="aac"
+            "render_time": round(end - start, 2)
 
-        )
-
-        return output
+        }

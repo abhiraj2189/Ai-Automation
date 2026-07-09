@@ -1,36 +1,37 @@
 from fastapi import APIRouter
 
-from python.renderer.models import RenderRequest
+from python.renderer.models import RendererRequest
 
 from python.renderer.renderer_service import RendererService
 
+
 router = APIRouter(
 
-    prefix="/render",
+    prefix="/renderer",
 
-    tags=["Renderer"]
+    tags=["Renderer V2"]
 
 )
 
 
 @router.post("/")
 
-def render(data: RenderRequest):
+def render(
+
+    data: RendererRequest
+
+):
 
     service = RendererService()
 
-    return {
+    return service.render(
 
-        "video": service.render(
+        audio=data.audio,
 
-            data.video_paths,
+        subtitle=data.subtitle,
 
-            data.audio_path,
+        videos=data.videos,
 
-            data.subtitle_path,
+        output=data.output
 
-            data.output
-
-        )
-
-    }
+    )
