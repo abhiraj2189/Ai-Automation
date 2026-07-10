@@ -6,3 +6,11 @@ __pycache__/
 outputs/
 node_modules/
 .env
+.venv/
+node_modules/
+outputs/
+*.mp4
+*.dll
+*.pyd
+*.exe
+__pycache__/
