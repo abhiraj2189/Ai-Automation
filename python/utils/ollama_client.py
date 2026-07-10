@@ -12,17 +12,23 @@ def generate(prompt: str, system: str = ""):
         "model": settings.OLLAMA_MODEL,
         "prompt": prompt,
         "system": system,
-        "stream": False
+        "stream": False,
+        "options": {
+            "temperature": 0.4,
+            "num_predict": 2048,
+        },
     }
 
     print("=" * 80)
     print("MODEL :", settings.OLLAMA_MODEL)
+    print("Prompt Length :", len(prompt))
     print("Sending request to Ollama...")
+    print(payload)
 
     response = requests.post(
         OLLAMA_URL,
         json=payload,
-        timeout=180
+        timeout=600
     )
 
     print("STATUS :", response.status_code)
@@ -32,65 +38,41 @@ def generate(prompt: str, system: str = ""):
     data = response.json()
 
     print("DONE :", data.get("done"))
+    print("TOTAL DURATION :", data.get("total_duration"))
 
     text = data.get("response", "")
 
     print("Response Length :", len(text))
-
     print("=" * 80)
 
     return text
 
 
-# ===================================================
-# TEXT GENERATION
-# ===================================================
-
 def generate_text(prompt: str, system: str = ""):
-    """
-    Used by ResearchService and ScriptService
-    """
     return generate(prompt, system)
 
-
-# ===================================================
-# JSON GENERATION
-# ===================================================
 
 def generate_json(prompt: str, system: str = ""):
 
     text = generate(prompt, system)
 
-    print("\n================ RAW RESPONSE ================\n")
-    print(text)
-    print("\n==============================================\n")
-
-    # Direct JSON
     try:
         return json.loads(text)
-    except Exception:
+    except:
         pass
 
-    # JSON Object
     try:
-        start = text.find("{")
-        end = text.rfind("}")
-
-        if start != -1 and end != -1:
-            return json.loads(text[start:end + 1])
-    except Exception:
+        start = text.index("{")
+        end = text.rindex("}") + 1
+        return json.loads(text[start:end])
+    except:
         pass
 
-    # JSON Array
     try:
-        start = text.find("[")
-        end = text.rfind("]")
-
-        if start != -1 and end != -1:
-            return json.loads(text[start:end + 1])
-    except Exception:
+        start = text.index("[")
+        end = text.rindex("]") + 1
+        return json.loads(text[start:end])
+    except:
         pass
 
-    raise ValueError(
-        "Ollama did not return valid JSON.\n\nResponse:\n" + text
-    )
+    raise Exception(text)

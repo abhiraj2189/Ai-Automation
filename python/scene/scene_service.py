@@ -19,25 +19,16 @@ class SceneService:
 
     def generate_scene(self, script: str):
 
+        print("=" * 80)
+        print("SCRIPT LENGTH :", len(script))
+        print(script[:500])
+        print("=" * 80)
+
         prompt = PromptBuilder.build(script)
 
-        try:
+        print("PROMPT LENGTH :", len(prompt))
 
-            return generate_json(
-                prompt=prompt,
-                system=SYSTEM_PROMPT
-            )
-
-        except ValueError:
-
-            return [
-                {
-                    "scene": 1,
-                    "duration": "0-10 sec",
-                    "voice": script[:200],
-                    "visual": "Technology",
-                    "caption": "AI Automation",
-                    "animation": "Zoom In",
-                    "transition": "Fade"
-                }
-            ]
+        return generate_json(
+            prompt=prompt,
+            system=SYSTEM_PROMPT
+        )
