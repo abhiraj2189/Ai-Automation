@@ -3,19 +3,29 @@ from python.composer.video_composer import VideoComposer
 
 class ComposerService:
 
+    def __init__(self):
+        self.composer = VideoComposer()
+
     def generate(
         self,
         audio,
         subtitle,
         videos,
-        output
+        output,
+        scenes=None,
+        background_music=None
     ):
 
-        composer = VideoComposer()
-
-        return composer.compose(
+        result = self.composer.compose(
             audio=audio,
             subtitle=subtitle,
             videos=videos,
-            output=output
+            output=output,
+            scenes=scenes,
+            background_music=background_music
         )
+
+        return {
+            "status": "completed",
+            "video": result
+        }

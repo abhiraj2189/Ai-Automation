@@ -3,24 +3,24 @@ from python.composer.moviepy_engine import MoviePyEngine
 
 class VideoComposer:
 
+    def __init__(self):
+        self.engine = MoviePyEngine()
+
     def compose(
         self,
+        videos,
         audio,
         subtitle,
-        videos,
-        output
+        output,
+        scenes=None,
+        background_music=None
     ):
 
-        engine = MoviePyEngine()
-
-        video = engine.compose(
+        return self.engine.compose(
             videos=videos,
             audio=audio,
             subtitle=subtitle,
-            output=output
+            output=output,
+            scenes=scenes,
+            background_music=background_music
         )
-
-        return {
-            "status": "completed",
-            "video": video
-        }
