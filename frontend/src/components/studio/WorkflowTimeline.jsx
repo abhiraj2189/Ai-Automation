@@ -1,75 +1,91 @@
-const steps = [
+import {
 
-    "Research",
+FaCheckCircle,
 
-    "Script",
+FaSpinner
 
-    "Voice",
+} from "react-icons/fa";
 
-    "Subtitle",
+const steps=[
 
-    "Assets",
+["script","Script"],
 
-    "Composer",
+["voice","Voice"],
 
-    "Completed"
+["subtitle","Subtitle"],
+
+["assets","Assets"],
+
+["render","Rendering"],
+
+["completed","Completed"]
 
 ];
 
-export default function WorkflowTimeline({ progress }) {
+export default function WorkflowTimeline({
 
-    const current = Math.floor(progress / 15);
+status
 
-    return (
+}){
 
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+return(
 
-            <h2 className="text-xl font-bold mb-6">
+<div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-8">
 
-                Workflow
+<h2 className="text-2xl font-bold mb-8">
 
-            </h2>
+Workflow Progress
 
-            <div className="space-y-4">
+</h2>
 
-                {
+<div className="space-y-6">
 
-                    steps.map((step,index)=>(
+{
 
-                        <div
+steps.map(step=>(
 
-                            key={step}
+<div
 
-                            className={`p-3 rounded-xl
+key={step[0]}
 
-                            ${
+className="flex items-center justify-between"
 
-                                index<=current
+>
 
-                                ?
+<div>
 
-                                "bg-cyan-500 text-white"
+<h3 className="font-semibold">
 
-                                :
+{step[1]}
 
-                                "bg-zinc-800"
+</h3>
 
-                            }`}
+</div>
 
-                        >
+{
 
-                            {step}
+status?.[step[0]]
 
-                        </div>
+?
 
-                    ))
+<FaCheckCircle className="text-green-400"/>
 
-                }
+:
 
-            </div>
+<FaSpinner className="animate-spin text-cyan-400"/>
 
-        </div>
+}
 
-    );
+</div>
+
+))
+
+}
+
+</div>
+
+</div>
+
+);
 
 }

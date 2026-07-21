@@ -12,6 +12,7 @@ import {
     FaVideo,
     FaTasks,
 } from "react-icons/fa";
+import { FaChartLine } from "react-icons/fa";
 
 export default function Sidebar() {
 
@@ -118,6 +119,20 @@ export default function Sidebar() {
                         <FaCog />
                         Settings
                     </Link>
+                    <Link
+    to="/projects"
+    className="flex items-center gap-3 hover:text-cyan-400 transition"
+>
+    <FaFolderOpen />
+    Projects
+</Link>
+<Link
+    to="/analytics"
+    className="flex items-center gap-3 hover:text-cyan-400 transition"
+>
+    <FaChartLine />
+    Analytics
+</Link>
 
                 </nav>
 

@@ -4,6 +4,9 @@ import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import Studio from "../pages/Studio";
 import Jobs from "../pages/Jobs";
+import ChatPage from "../chat/ChatPage";
+import ProjectsPage from "../projects/ProjectsPage";
+import AnalyticsPage from "../analytics/AnalyticsPage";
 
 export default function AppRoutes(){
 
@@ -19,6 +22,11 @@ export default function AppRoutes(){
 
             <Route path="/jobs" element={<Jobs/>}/>
 
+            <Route path="/chat" element={<ChatPage />} />
+
+            <Route path="/projects" element={<ProjectsPage />} />
+
+            <Route path="/analytics" element={<AnalyticsPage />} />
         </Routes>
 
     );

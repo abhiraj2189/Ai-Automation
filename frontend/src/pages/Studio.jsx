@@ -1,39 +1,24 @@
 import { useState } from "react";
-import { FaMagic } from "react-icons/fa";
+import { FaMagic, FaVideo } from "react-icons/fa";
 
-import { generateVideo } from "../api/studioApi";
-import useJobPolling from "../hooks/useJobPolling";
+import { generateVideo } from "../services/studioService";
 
-import ProgressCard from "../components/studio/ProgressCard";
 import WorkflowTimeline from "../components/studio/WorkflowTimeline";
-import LogsPanel from "../components/studio/LogsPanel";
-import VideoPlayer from "../components/studio/VideoPlayer";
-
+import useWorkflow from "../hooks/useWorkflow";
+import useWorkflow from "../hooks/useWorkflow";
 export default function Studio() {
 
     const [topic, setTopic] = useState("");
-
     const [language, setLanguage] = useState("English");
+    const [duration, setDuration] =useState("60");
 
-    const [duration, setDuration] = useState("60");
-
-    const [loading, setLoading] = useState(false);
-
-    const [jobId, setJobId] = useState(null);
-
-    const [progress, setProgress] = useState(0);
-
-    const [status, setStatus] = useState("Idle");
-
-    const [logs, setLogs] = useState([]);
-
-    const [videoUrl, setVideoUrl] = useState("");
+    const [loading, setLoading]=useState(false);
 
     const handleGenerate = async () => {
 
         if (!topic.trim()) {
 
-            alert("Please enter a topic.");
+            alert("Please enter video topic.");
 
             return;
 
@@ -43,27 +28,25 @@ export default function Studio() {
 
             setLoading(true);
 
-            setProgress(0);
-
-            setStatus("Starting");
-
-            setLogs([]);
-
-            setVideoUrl("");
-
-            const data = await generateVideo(
+            const response = await generateVideo({
 
                 topic,
 
                 language,
 
-                Number(duration)
+                duration
 
-            );
+            });
+            console.log(response);
+            setJobid(response.job_id);
+            const [jobId,setJobId]=useState(null);
 
-            console.log(data);
+             const workflow=useWorkflow(jobId);
 
-            setJobId(data.job_id);
+             console.log("Backend Response:", response);
+
+             alert("Video Generation Started!");
+            const workflow = useWorkflow(jobId);
 
         }
 
@@ -89,48 +72,6 @@ export default function Studio() {
 
     };
 
-    useJobPolling(
-
-        jobId,
-
-        (job) => {
-
-            setProgress(job.progress || 0);
-
-            setStatus(job.status || "Running");
-
-            setLogs(job.logs || []);
-
-        },
-
-        (job) => {
-
-            setStatus("Completed");
-
-            setProgress(100);
-
-            setVideoUrl(job.video || "");
-
-        }
-
-    );
-
-    const downloadVideo = () => {
-
-        if (videoUrl) {
-
-            window.open(videoUrl);
-
-        }
-
-    };
-
-    const deleteVideo = () => {
-
-        setVideoUrl("");
-
-    };
-
     return (
 
         <div className="space-y-8">
@@ -145,7 +86,7 @@ export default function Studio() {
 
                 <p className="text-zinc-400 mt-2">
 
-                    Generate AI Videos Automatically
+                    Generate Professional AI Videos
 
                 </p>
 
@@ -165,11 +106,11 @@ export default function Studio() {
 
                         value={topic}
 
-                        onChange={(e) => setTopic(e.target.value)}
+                        onChange={(e)=>setTopic(e.target.value)}
 
-                        placeholder="Enter video topic..."
+                        placeholder="Enter Video Topic..."
 
-                        className="w-full p-4 rounded-xl bg-zinc-800 outline-none"
+                        className="w-full bg-zinc-800 rounded-xl p-4 outline-none"
 
                     />
 
@@ -179,7 +120,7 @@ export default function Studio() {
 
                     <div>
 
-                        <label className="block mb-2">
+                        <label className="block mb-2 font-semibold">
 
                             Language
 
@@ -191,7 +132,7 @@ export default function Studio() {
 
                             onChange={(e)=>setLanguage(e.target.value)}
 
-                            className="w-full p-4 rounded-xl bg-zinc-800"
+                            className="w-full bg-zinc-800 rounded-xl p-4"
 
                         >
 
@@ -207,7 +148,7 @@ export default function Studio() {
 
                     <div>
 
-                        <label className="block mb-2">
+                        <label className="block mb-2 font-semibold">
 
                             Duration
 
@@ -219,7 +160,7 @@ export default function Studio() {
 
                             onChange={(e)=>setDuration(e.target.value)}
 
-                            className="w-full p-4 rounded-xl bg-zinc-800"
+                            className="w-full bg-zinc-800 rounded-xl p-4"
 
                         >
 
@@ -253,7 +194,7 @@ export default function Studio() {
 
                     disabled={loading}
 
-                    className="bg-cyan-500 hover:bg-cyan-600 disabled:bg-zinc-700 px-8 py-4 rounded-xl flex items-center gap-3 font-bold"
+                    className="bg-cyan-500 hover:bg-cyan-600 disabled:bg-zinc-700 px-8 py-4 rounded-xl font-bold flex items-center gap-3 transition"
 
                 >
 
@@ -277,35 +218,25 @@ export default function Studio() {
 
             </div>
 
-            <ProgressCard
+            <WorkflowTimeline />
 
-                progress={progress}
+            <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-8">
 
-                status={status}
+                <h2 className="text-2xl font-bold flex items-center gap-3 mb-6">
 
-            />
+                    <FaVideo />
 
-            <WorkflowTimeline
+                    Latest Video
 
-                progress={progress}
+                </h2>
 
-            />
+                <div className="border border-dashed border-zinc-700 rounded-xl h-64 flex items-center justify-center text-zinc-500">
 
-            <LogsPanel
+                    Video Preview Coming Soon...
 
-                logs={logs}
+                </div>
 
-            />
-
-            <VideoPlayer
-
-                videoUrl={videoUrl}
-
-                onDownload={downloadVideo}
-
-                onDelete={deleteVideo}
-
-            />
+            </div>
 
         </div>
 
