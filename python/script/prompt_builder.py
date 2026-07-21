@@ -1,26 +1,27 @@
 class PromptBuilder:
 
     @staticmethod
-    def build(research: str):
+    def build(research: str) -> str:
 
         return f"""
-You are an expert Tech YouTube Script Writer.
-
-Using the research below, create a professional YouTube Shorts / Instagram Reel script.
-
 Research:
-
 {research}
 
-Requirements:
+Task:
+Write a YouTube Shorts script based on the research above.
 
-- Language: Hinglish
-- Duration: 45-60 seconds
-- Start with a powerful hook
-- Explain simply
-- Use storytelling
-- Include one real-life example
-- End with a strong CTA
+STRICT LANGUAGE RULES:
+- Write in Hinglish (Hindi + English mix)
+- Exactly like Indian YouTubers speak
+- Hindi sentence structure, English technical words
+- Example style: "Aaj hum baat karenge Python ke baare mein, jo ek bahut powerful programming language hai"
+- NEVER write in pure Hindi or pure English
+- Roman script only (no Devanagari)
 
-Return only the script.
+STRICT FORMAT RULES:
+- Start with a shocking fact or curiosity hook
+- No greetings (no Hi, Hello, Welcome)
+- Short punchy sentences
+- Maximum 60 seconds when spoken
+- Return only the script, nothing else
 """

@@ -161,7 +161,7 @@ class WorkflowService:
         VoiceService().generate(
             text=script,
             output=voice_path,
-            language="hindi_male"
+            language="hinglish_male"
         )
 
         voice = {
